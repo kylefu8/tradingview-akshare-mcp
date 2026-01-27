@@ -60,7 +60,7 @@ pip install -e .
   "mcpServers": {
     "tradingview-akshare-mcp": {
       "command": "python",
-      "args": ["C:/path/to/tradingview-akshare-mcp/server.py"]
+      "args": ["C:/path/to/tradingview-akshare-mcp/mcp/server.py"]
     }
   }
 }
@@ -75,7 +75,7 @@ pip install -e .
   "mcpServers": {
     "tradingview-akshare-mcp": {
       "command": "python",
-      "args": ["C:/path/to/tradingview-akshare-mcp/server.py"]
+      "args": ["C:/path/to/tradingview-akshare-mcp/mcp/server.py"]
     }
   }
 }
