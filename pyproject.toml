@@ -15,6 +15,7 @@ dependencies = [
     "akshare>=1.10.0",
     "pandas>=2.0.0",
     "numpy>=1.24.0",
+    "pyarrow>=14.0.0",  # 用于 parquet 格式本地缓存
 ]
 
 [project.scripts]

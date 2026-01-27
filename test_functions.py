@@ -12,6 +12,13 @@ import pandas as pd
 import numpy as np
 import akshare as ak
 
+# 导入我们的多源数据管理器
+from server import DataSourceManager, CacheManager
+
+# 初始化
+data_source = DataSourceManager()
+cache = CacheManager()
+
 
 def calculate_bollinger_bands(df, window=20, num_std=2):
     df = df.copy()
@@ -49,35 +56,40 @@ def test_stock_analysis(symbol="601138"):
     print(f"测试 stock_analysis: {symbol}")
     print('='*60)
     
-    end_date = datetime.now().strftime("%Y%m%d")
-    start_date = (datetime.now() - timedelta(days=365)).strftime("%Y%m%d")
-    
-    df = ak.stock_zh_a_hist(
-        symbol=symbol,
-        period="daily",
-        start_date=start_date,
-        end_date=end_date,
-        adjust="qfq"
-    )
-    
-    if df.empty:
-        print(f"❌ 未找到数据: {symbol}")
+    try:
+        end_date = datetime.now().strftime("%Y%m%d")
+        start_date = (datetime.now() - timedelta(days=365)).strftime("%Y%m%d")
+        
+        # 使用多源数据管理器
+        df = data_source.get_stock_history(
+            symbol=symbol,
+            period="daily",
+            start_date=start_date,
+            end_date=end_date,
+            adjust="qfq"
+        )
+        
+        if df.empty:
+            print(f"❌ 未找到数据: {symbol}")
+            return False
+        
+        df = calculate_bollinger_bands(df)
+        df = calculate_rsi(df)
+        df = calculate_macd(df)
+        
+        latest = df.iloc[-1]
+        
+        print(f"✅ 获取到 {len(df)} 条数据")
+        print(f"   最新价: {latest['收盘']:.2f}")
+        print(f"   涨跌幅: {latest['涨跌幅']:.2f}%")
+        print(f"   RSI: {latest['RSI']:.2f}")
+        print(f"   MACD: {latest['MACD']:.4f}")
+        print(f"   BB上轨: {latest['BB_upper']:.2f}")
+        print(f"   BB下轨: {latest['BB_lower']:.2f}")
+        return True
+    except Exception as e:
+        print(f"❌ 错误: {e}")
         return False
-    
-    df = calculate_bollinger_bands(df)
-    df = calculate_rsi(df)
-    df = calculate_macd(df)
-    
-    latest = df.iloc[-1]
-    
-    print(f"✅ 获取到 {len(df)} 条数据")
-    print(f"   最新价: {latest['收盘']:.2f}")
-    print(f"   涨跌幅: {latest['涨跌幅']:.2f}%")
-    print(f"   RSI: {latest['RSI']:.2f}")
-    print(f"   MACD: {latest['MACD']:.4f}")
-    print(f"   BB上轨: {latest['BB_upper']:.2f}")
-    print(f"   BB下轨: {latest['BB_lower']:.2f}")
-    return True
 
 
 def test_stock_quote(symbol="600519"):
@@ -87,7 +99,8 @@ def test_stock_quote(symbol="600519"):
     print('='*60)
     
     try:
-        df = ak.stock_zh_a_spot_em()
+        # 使用多源数据管理器
+        df = data_source.get_realtime_quotes()
         stock = df[df['代码'] == symbol]
         
         if stock.empty:
@@ -112,7 +125,8 @@ def test_top_gainers():
     print('='*60)
     
     try:
-        df = ak.stock_zh_a_spot_em()
+        # 使用多源数据管理器
+        df = data_source.get_realtime_quotes()
         df = df.sort_values('涨跌幅', ascending=False).head(5)
         
         print(f"✅ 涨幅前5:")
@@ -131,7 +145,8 @@ def test_stock_search(keyword="茅台"):
     print('='*60)
     
     try:
-        df = ak.stock_zh_a_spot_em()
+        # 使用多源数据管理器
+        df = data_source.get_realtime_quotes()
         matches = df[df['名称'].str.contains(keyword, na=False)].head(5)
         
         print(f"✅ 找到 {len(matches)} 个匹配:")
@@ -153,7 +168,8 @@ def test_index_analysis(symbol="000001"):
         end_date = datetime.now().strftime("%Y%m%d")
         start_date = (datetime.now() - timedelta(days=365)).strftime("%Y%m%d")
         
-        df = ak.index_zh_a_hist(
+        # 使用多源数据管理器
+        df = data_source.get_index_history(
             symbol=symbol,
             period="daily",
             start_date=start_date,
@@ -175,15 +191,27 @@ def test_index_analysis(symbol="000001"):
 
 
 if __name__ == "__main__":
+    import time
+    
     print("\n" + "="*60)
     print("  AKShare MCP 功能测试")
     print("="*60)
     
     results = []
+    
+    # 添加请求间隔避免触发速率限制
     results.append(("stock_analysis", test_stock_analysis("601138")))
+    time.sleep(2)  # 等待2秒
+    
     results.append(("stock_quote", test_stock_quote("600519")))
+    time.sleep(2)
+    
     results.append(("top_gainers", test_top_gainers()))
+    time.sleep(2)
+    
     results.append(("stock_search", test_stock_search("茅台")))
+    time.sleep(2)
+    
     results.append(("index_analysis", test_index_analysis("000001")))
     
     print("\n" + "="*60)
