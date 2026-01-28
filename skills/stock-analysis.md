@@ -3,7 +3,8 @@ name: stock-analysis
 description: A股技术分析专家 - 使用 tradingview-akshare-mcp 进行个股和市场技术分析
 argument-hint: "股票代码或名称，如 '000001'、'平安银行'、'茅台'"
 mcp:
-  - tradingview-akshare-mcp
+  tradingview-akshare-mcp:
+    command: tradingview-akshare-mcp
 ---
 
 # A股技术分析专家
