@@ -46,7 +46,8 @@ A股市场技术分析 MCP (Model Context Protocol) Server，基于 AKShare 数�
 1. 克隆仓库到本地: git clone https://github.com/kylefu8/tradingview-akshare-mcp.git
 2. 使用 uv 或 pip 安装: uv tool install . 或 pip install -e .
 3. 根据我使用的 AI 客户端（OpenCode/Claude Desktop）自动配置 MCP Server
-4. 验证安装是否成功
+4. 配置 Skills 技能文件，让 AI 具备专业的 A 股技术分析能力
+5. 验证安装是否成功
 ```
 
 ### 方法 2: 使用 uv 一键安装
@@ -127,9 +128,56 @@ pip install -e .
 - **综合评分系统**: 基于多指标的综合买卖信号判断
 - **标准化输出格式**: 结构化的分析报告模板
 
-### 使用方式
+### 配置方式
 
-将 `skills/stock-analysis.md` 技能文件配置到支持 Skills 的 AI 客户端（如 Claude Desktop、OpenCode 等），即可让 AI 助手具备专业的 A 股技术分析能力。
+#### Claude Desktop
+
+在 Claude Desktop 的 AGENTS.md 或项目根目录创建 `.claude/skills/` 目录，将技能文件复制进去：
+
+```bash
+# 创建技能目录
+mkdir -p .claude/skills
+
+# 复制技能文件
+cp skills/stock-analysis.md .claude/skills/
+```
+
+或者在项目根目录创建 `AGENTS.md`，引用技能文件：
+
+```markdown
+## Skills
+
+- [A股技术分析专家](skills/stock-analysis.md)
+```
+
+#### OpenCode
+
+编辑 `~/.config/opencode/opencode.json`，添加 skills 配置：
+
+```json
+{
+  "skills": [
+    "/path/to/tradingview-akshare-mcp/skills/stock-analysis.md"
+  ]
+}
+```
+
+或在项目根目录创建 `.opencode/skills/` 目录：
+
+```bash
+mkdir -p .opencode/skills
+cp skills/stock-analysis.md .opencode/skills/
+```
+
+#### 验证配置
+
+配置完成后，向 AI 助手发送以下消息测试：
+
+```
+分析一下贵州茅台的技术面
+```
+
+AI 助手应该会自动调用 `stock_search` 和 `stock_analysis` 工具进行分析。
 
 ## 使用示例
 
