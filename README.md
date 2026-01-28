@@ -176,22 +176,14 @@ cp skills/stock-analysis.md .claude/skills/
 
 #### OpenCode
 
-编辑 `~/.config/opencode/opencode.json`，添加 skills 配置：
-
-```json
-{
-  "skills": [
-    "/path/to/tradingview-akshare-mcp/skills/stock-analysis.md"
-  ]
-}
-```
-
-或在项目根目录创建 `.opencode/skills/` 目录：
+在项目根目录创建 `.opencode/skills/` 目录，将技能文件复制进去：
 
 ```bash
 mkdir -p .opencode/skills
 cp skills/stock-analysis.md .opencode/skills/
 ```
+
+> 💡 **提示**: Skills 文件已内置 MCP 配置，OpenCode 会自动加载。
 
 #### 验证配置
 
