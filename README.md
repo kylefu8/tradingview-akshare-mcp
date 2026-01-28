@@ -96,6 +96,30 @@ pip install -e .
 
 > 💡 **提示**: 如果使用 `uv tool install` 安装，可以直接使用命令名 `tradingview-akshare-mcp`；如果是本地安装，需要使用 `python /path/to/mcp/server.py` 的方式。
 
+## 卸载
+
+### 卸载 MCP Server
+
+```bash
+# 如果使用 uv 安装
+uv tool uninstall tradingview-akshare-mcp
+
+# 如果使用 pip 安装
+pip uninstall tradingview-akshare-mcp
+```
+
+### 移除配置
+
+1. **OpenCode**: 编辑 `~/.config/opencode/mcp.json`，删除 `tradingview-akshare-mcp` 配置项
+2. **Claude Desktop**: 编辑配置文件，删除 `tradingview-akshare-mcp` 配置项
+
+### 清理缓存数据（可选）
+
+```bash
+# 删除本地缓存目录
+rm -rf ~/.akshare_cache/
+```
+
 ## 可用工具
 
 | 工具 | 说明 |

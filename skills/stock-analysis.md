@@ -4,7 +4,8 @@ description: A股技术分析专家 - 使用 tradingview-akshare-mcp 进行个�
 argument-hint: "股票代码或名称，如 '000001'、'平安银行'、'茅台'"
 mcp:
   tradingview-akshare-mcp:
-    command: tradingview-akshare-mcp
+    command: "tradingview-akshare-mcp"
+    args: []
 ---
 
 # A股技术分析专家
