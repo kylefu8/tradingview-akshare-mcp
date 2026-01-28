@@ -1451,8 +1451,8 @@ async def get_prompt(name: str, arguments: dict[str, str] | None = None) -> list
 
 # ============== 主入口 ==============
 
-async def main():
-    """运行 MCP Server"""
+async def async_main():
+    """运行 MCP Server (async)"""
     async with stdio_server() as (read_stream, write_stream):
         await server.run(
             read_stream,
@@ -1461,5 +1461,10 @@ async def main():
         )
 
 
+def main():
+    """入口点函数 - 供 pyproject.toml scripts 调用"""
+    asyncio.run(async_main())
+
+
 if __name__ == "__main__":
-    asyncio.run(main())
+    main()
