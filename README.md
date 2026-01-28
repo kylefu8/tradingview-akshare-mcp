@@ -36,15 +36,29 @@ A股市场技术分析 MCP (Model Context Protocol) Server，基于 AKShare 数�
 
 ## 安装
 
-### 方法 1: 使用 uv (推荐)
+### 方法 1: 让 AI 帮你安装（推荐）
+
+将以下提示词复制粘贴给你的 AI 助手（Claude Code、OpenCode、Cursor 等），让它自动完成安装和配置：
+
+```
+请帮我安装和配置 tradingview-akshare-mcp，按照以下步骤操作：
+
+1. 克隆仓库到本地: git clone https://github.com/kylefu8/tradingview-akshare-mcp.git
+2. 使用 uv 或 pip 安装: uv tool install . 或 pip install -e .
+3. 根据我使用的 AI 客户端（OpenCode/Claude Desktop）自动配置 MCP Server
+4. 验证安装是否成功
+```
+
+### 方法 2: 使用 uv 一键安装
 
 ```bash
 uv tool install git+https://github.com/kylefu8/tradingview-akshare-mcp.git
 ```
 
-### 方法 2: 本地安装
+### 方法 3: 本地安装
 
 ```bash
+git clone https://github.com/kylefu8/tradingview-akshare-mcp.git
 cd tradingview-akshare-mcp
 pip install -e .
 ```
@@ -59,8 +73,7 @@ pip install -e .
 {
   "mcpServers": {
     "tradingview-akshare-mcp": {
-      "command": "python",
-      "args": ["C:/path/to/tradingview-akshare-mcp/mcp/server.py"]
+      "command": "tradingview-akshare-mcp"
     }
   }
 }
@@ -68,18 +81,19 @@ pip install -e .
 
 ### Claude Desktop 配置
 
-编辑 `%APPDATA%\Claude\claude_desktop_config.json`:
+编辑 `%APPDATA%\Claude\claude_desktop_config.json` (Windows) 或 `~/Library/Application Support/Claude/claude_desktop_config.json` (macOS):
 
 ```json
 {
   "mcpServers": {
     "tradingview-akshare-mcp": {
-      "command": "python",
-      "args": ["C:/path/to/tradingview-akshare-mcp/mcp/server.py"]
+      "command": "tradingview-akshare-mcp"
     }
   }
 }
 ```
+
+> 💡 **提示**: 如果使用 `uv tool install` 安装，可以直接使用命令名 `tradingview-akshare-mcp`；如果是本地安装，需要使用 `python /path/to/mcp/server.py` 的方式。
 
 ## 可用工具
 
