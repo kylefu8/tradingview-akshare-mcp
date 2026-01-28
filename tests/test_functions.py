@@ -13,7 +13,7 @@ import numpy as np
 import akshare as ak
 
 # 导入我们的多源数据管理器
-from server import DataSourceManager, CacheManager
+from tradingview_akshare_mcp.server import DataSourceManager, CacheManager
 
 # 初始化
 data_source = DataSourceManager()
